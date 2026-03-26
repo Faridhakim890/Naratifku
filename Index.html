@@ -3,173 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Naratif.ku | Portal Novel Cloud</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora&display=swap" rel="stylesheet">
+    <title>Naratif.ku | Versi Sempurna</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #1a1a1a; --a: #d35400; --bg: #fdfaf6; }
-        body { font-family: 'Lora', serif; background: var(--bg); margin: 0; color: var(--p); line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        nav { background: white; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo { font-family: 'Poppins'; font-weight: 700; font-size: 1.4rem; cursor: pointer; }
-        .logo span { color: var(--a); }
-        .section { display: none; animation: fadeIn 0.3s; }
-        .active { display: block; }
+        :root { --primary: #d35400; --dark: #1a1a1a; --light-bg: #fdfaf6; --white: #ffffff; --text: #2c3e50; }
+        body.dark-mode { --light-bg: #121212; --white: #1e1e1e; --text: #e0e0e0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--light-bg); margin: 0; color: var(--text); transition: 0.3s; }
+        
+        nav { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: 700; cursor: pointer; color: var(--text); }
+        .logo span { color: var(--primary); }
+        
+        .search-bar { width: 100%; padding: 12px 20px; border-radius: 50px; border: 2px solid var(--primary); background: var(--white); color: var(--text); margin: 20px 0; box-sizing: border-box; }
+        .hero { background: linear-gradient(135deg, #d35400 0%, #a04000 100%); color: white; padding: 40px 5%; text-align: center; border-radius: 0 0 40px 40px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid rgba(128,128,128,0.1); }
+        .tag { background: rgba(211, 84, 0, 0.1); color: var(--primary); padding: 4px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; }
+        .reader-box { background: var(--white); padding: 40px; border-radius: 25px; font-family: 'Lora', serif; font-size: 1.2rem; line-height: 1.8; margin-top: 20px; }
+        .blurred { filter: blur(15px); pointer-events: none; height: 200px; overflow: hidden; }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; transform: scale(1.02); }
+        .paywall { text-align: center; padding: 40px; background: var(--white); border-radius: 20px; margin-top: -80px; position: relative; z-index: 10; border: 1px solid rgba(128,128,128,0.1); }
+        .section { display: none; }
+        .active { display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 15px; border-left: 5px solid var(--a); cursor: pointer; }
-        .btn { background: var(--a); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-family: 'Poppins'; font-weight: 600; width: 100%; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
-        textarea { height: 300px; }
-        .blurred { filter: blur(12px); user-select: none; pointer-events: none; }
-        .paywall { background: white; padding: 30px; text-align: center; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 20px; }
-        footer { text-align: center; padding: 50px; color: #888; font-size: 0.8rem; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc; background: var(--white); color: var(--text); box-sizing: border-box; }
+        footer { text-align: center; padding: 40px; opacity: 0.6; font-size: 0.8rem; }
+        .admin-tools { display: flex; gap: 10px; margin-top: 20px; }
     </style>
 </head>
-<body>
+<body id="body">
 
     <nav>
         <div class="logo" onclick="showPage('home')">Naratif<span>.ku</span></div>
-        <div>
-            <button onclick="showPage('home')" style="border:none; background:none; cursor:pointer; font-weight:bold;">🏠</button>
-            <button onclick="checkAdmin()" style="margin-left:15px; cursor:pointer; background:#333; color:white; border:none; padding:5px 10px; border-radius:5px;">✍️ Tulis</button>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="document.getElementById('body').classList.toggle('dark-mode')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
+            <button onclick="checkAdmin()" style="background:var(--dark); color:white; border:none; padding:5px 15px; border-radius:50px; cursor:pointer; font-size:0.8rem;">✍️ Penulis</button>
         </div>
     </nav>
 
+    <div id="hero" class="hero">
+        <h1 style="margin:0;">Pustaka Digital Anda</h1>
+        <p>Cari, baca, dan simpan karya anda dengan selamat.</p>
+    </div>
+
     <div class="container">
+        
         <section id="home" class="section active">
-            <h2 style="font-family: 'Poppins';">Novel Terkini (Live)</h2>
-            <div id="novel-feed">Menghubungkan ke database cloud...</div>
+            <input type="text" id="searchInput" class="search-bar" placeholder="Cari tajuk atau penulis..." onkeyup="filterNovels()">
+            <div id="novel-grid" class="grid"></div>
         </section>
 
         <section id="write" class="section">
-            <div style="background:white; padding:30px; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
-                <h2 style="font-family: 'Poppins';">Panel Penulis Cloud</h2>
-                <input type="text" id="author" placeholder="Nama Penulis / Nama Pena">
-                <input type="text" id="title" placeholder="Tajuk Novel">
-                <input type="text" id="chapter" placeholder="Bab (Contoh: Bab 1: Pertemuan)">
-                <textarea id="content" placeholder="Tuliskan isi novel anda di sini..."></textarea>
-                <button id="submit-btn" class="btn" onclick="submitToCloud()">Terbitkan Secara Live</button>
-                <p onclick="showPage('home')" style="text-align:center; cursor:pointer; color:gray; font-size:0.8rem; margin-top:15px;">Batal</p>
+            <div class="card">
+                <h3>Panel Penulis</h3>
+                <input type="text" id="w-author" placeholder="Nama Pena">
+                <input type="text" id="w-title" placeholder="Tajuk Novel">
+                <select id="w-genre">
+                    <option value="Aksi">Aksi</option><option value="Seram">Seram</option>
+                    <option value="Cinta">Cinta</option><option value="Misteri">Misteri</option>
+                </select>
+                <input type="text" id="w-chapter" placeholder="Bab Novel">
+                <textarea id="w-content" rows="10" placeholder="Isi cerita..."></textarea>
+                <button class="btn" onclick="saveNovel()">Terbitkan</button>
+                
+                <div class="admin-tools">
+                    <button class="btn" style="background:#27ae60; font-size:0.7rem;" onclick="exportData()">📥 Backup Novel</button>
+                    <button class="btn" style="background:#2980b9; font-size:0.7rem;" onclick="document.getElementById('fileInput').click()">📤 Restore Novel</button>
+                    <input type="file" id="fileInput" style="display:none" onchange="importData(event)">
+                </div>
+                <center><p onclick="showPage('home')" style="cursor:pointer; opacity:0.5; margin-top:20px;">Batal</p></center>
             </div>
         </section>
 
         <section id="reader" class="section">
-            <button onclick="showPage('home')" style="margin-bottom:20px; border:none; background:none; color:var(--a); cursor:pointer; font-weight:bold;">← Kembali</button>
-            <h1 id="r-title" style="font-family:'Poppins'; margin-bottom:5px;"></h1>
-            <p id="r-author" style="color:var(--a); font-weight:bold;"></p>
-            <hr style="opacity:0.1;">
-            <div id="r-body" class="blurred" style="white-space: pre-wrap; line-height: 2; font-size: 1.1rem; padding: 20px 0;"></div>
+            <button onclick="showPage('home')" style="background:none; border:none; color:var(--primary); cursor:pointer; font-weight:bold;">← Kembali</button>
+            <div style="text-align: center; margin: 20px 0;">
+                <span id="r-genre" class="tag"></span>
+                <h1 id="r-title" style="margin:10px 0; font-size: 2rem;"></h1>
+                <p id="r-info" style="opacity:0.7;"></p>
+            </div>
+
+            <div style="text-align:center; margin: 20px 0;">
+                <script type="text/javascript">
+                    atOptions = {'key' : '77fba6248804533f3fe2e33d020f89d0','format' : 'iframe','height' : 60,'width' : 468,'params' : {}};
+                </script>
+                <script type="text/javascript" src="https://www.highperformanceformat.com/77fba6248804533f3fe2e33d020f89d0/invoke.js"></script>
+            </div>
+
+            <div id="r-body" class="reader-box blurred"></div>
 
             <div id="paywall" class="paywall">
-                <h3 style="font-family:'Poppins';">🔒 Bab Dikunci</h3>
-                <p>Sila tonton iklan ringkas untuk membuka bab ini.</p>
-                <div style="margin:20px 0; border:1px dashed #ccc; padding:10px;">
-                    <script type="text/javascript">
-                        atOptions = {'key' : '77fba6248804533f3fe2e33d020f89d0','format' : 'iframe','height' : 60,'width' : 468,'params' : {}};
-                    </script>
-                    <script type="text/javascript" src="https://www.highperformanceformat.com/77fba6248804533f3fe2e33d020f89d0/invoke.js"></script>
-                </div>
-                <button class="btn" id="ad-btn" onclick="startAdTimer()">Buka Kandungan</button>
+                <h3>Sertai Pengembaraan</h3>
+                <p>Kandungan dikunci seketika. Sila tunggu iklan selesai.</p>
+                <button id="ad-btn" class="btn" style="max-width:250px;" onclick="unlock()">Buka Kandungan (5s)</button>
             </div>
         </section>
     </div>
 
-    <footer>&copy; 2026 Naratif.ku | Powered by Supabase Cloud API</footer>
+    <footer>&copy; 2026 Naratif.ku | Ahmad Fauzi</footer>
 
     <script>
-        // DATA API ANDA
-        const SB_URL = "https://wspkaxebzqtzvxuihxws.supabase.co";
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3enFyZGtlbHBrc2JtcHZxY3FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MzE1MDUsImV4cCI6MjA5MDEwNzUwNX0.J9f1V6q7nTwIy6DMw1SPUntgXy3MWTMeubOay_NmXqQ";
-        
-        // Inisialisasi Supabase
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+        let db = JSON.parse(localStorage.getItem('naratif_v3')) || [];
 
-        async function fetchNovels() {
-            const feed = document.getElementById('novel-feed');
-            try {
-                const { data, error } = await _supabase.from('novels').select('*').order('created_at', { ascending: false });
-                
-                if(error) {
-                    console.error(error);
-                    feed.innerHTML = "<p>Ralat menyambung ke database. Sila pastikan Table 'novels' telah dicipta di Supabase SQL Editor.</p>";
-                    return;
-                }
-                
-                feed.innerHTML = data.length ? data.map(n => `
-                    <div class="card" onclick="viewNovel(${n.id})">
-                        <h3 style="margin:0; font-family:'Poppins';">${n.title}</h3>
-                        <small style="color:gray;">Oleh: ${n.author_name} | ${n.chapter}</small>
-                    </div>
-                `).join('') : "<p style='text-align:center; color:gray;'>Tiada novel lagi. Mari tulis novel pertama anda!</p>";
-            } catch (e) {
-                feed.innerHTML = "<p>Terjadi ralat teknikal. Sila semak konsol.</p>";
-            }
+        function showPage(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('hero').style.display = (id === 'home') ? 'block' : 'none';
+            if(id === 'home') renderHome(db);
+            window.scrollTo(0,0);
         }
 
-        async function submitToCloud() {
-            const btn = document.getElementById('submit-btn');
-            const author = document.getElementById('author').value;
-            const title = document.getElementById('title').value;
-            const chapter = document.getElementById('chapter').value;
-            const content = document.getElementById('content').value;
-
-            if(!title || !content || !author) return alert("Sila isi semua ruangan!");
-
-            btn.innerText = "Sedang Menerbitkan...";
-            btn.disabled = true;
-
-            const { error } = await _supabase.from('novels').insert([
-                { author_name: author, title: title, chapter: chapter, content: content }
-            ]);
-
-            if(error) {
-                alert("Gagal terbit: " + error.message);
-                btn.disabled = false;
-                btn.innerText = "Terbitkan Secara Live";
-            } else {
-                alert("Berjaya Diterbitkan!");
-                window.location.reload();
-            }
+        function renderHome(data) {
+            const grid = document.getElementById('novel-grid');
+            grid.innerHTML = data.length ? data.map((n) => `
+                <div class="card" onclick="openNovel('${n.id}')">
+                    <span class="tag">${n.genre}</span>
+                    <h3 style="margin:10px 0 5px 0;">${n.title}</h3>
+                    <p style="font-size:0.8rem; opacity:0.7;">${n.author}</p>
+                    <p style="color:var(--primary); font-weight:600; font-size:0.9rem; margin-top:10px;">${n.chapter}</p>
+                </div>
+            `).reverse().join('') : "<p style='grid-column:1/-1; text-align:center;'>Tiada novel.</p>";
         }
 
-        async function viewNovel(id) {
-            const { data } = await _supabase.from('novels').select('*').eq('id', id).single();
-            document.getElementById('r-title').innerText = data.title;
-            document.getElementById('r-author').innerText = `${data.author_name} - ${data.chapter}`;
-            document.getElementById('r-body').innerText = data.content;
+        function filterNovels() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            renderHome(db.filter(n => n.title.toLowerCase().includes(query) || n.author.toLowerCase().includes(query)));
+        }
+
+        function saveNovel() {
+            const n = { id: Date.now().toString(), author: document.getElementById('w-author').value, title: document.getElementById('w-title').value, genre: document.getElementById('w-genre').value, chapter: document.getElementById('w-chapter').value, content: document.getElementById('w-content').value };
+            if(!n.title || !n.content) return alert("Sila lengkapkan!");
+            db.push(n); localStorage.setItem('naratif_v3', JSON.stringify(db));
+            alert("Berjaya disiarkan!"); showPage('home');
+        }
+
+        function openNovel(id) {
+            const n = db.find(item => item.id === id);
+            document.getElementById('r-title').innerText = n.title;
+            document.getElementById('r-genre').innerText = n.genre;
+            document.getElementById('r-info').innerText = `Oleh ${n.author} | ${n.chapter}`;
+            document.getElementById('r-body').innerText = n.content;
             document.getElementById('r-body').classList.add('blurred');
             document.getElementById('paywall').style.display = 'block';
             showPage('reader');
         }
 
-        function showPage(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(id === 'home') fetchNovels();
-            window.scrollTo(0,0);
-        }
-
-        function checkAdmin() {
-            let p = prompt("Masukkan Kata Laluan Penulis (Default: 1234):");
-            if(p === "1234") showPage('write');
-            else alert("Kata laluan salah.");
-        }
-
-        function startAdTimer() {
-            let b = document.getElementById('ad-btn');
-            let c = 5; b.disabled = true;
-            let t = setInterval(() => {
-                b.innerText = `Sila Tunggu (${c}s)...`; c--;
-                if(c < 0) {
-                    clearInterval(t);
-                    document.getElementById('r-body').classList.remove('blurred');
-                    document.getElementById('paywall').style.display = 'none';
-                    b.disabled = false; b.innerText = "Buka Kandungan";
-                }
+        function unlock() {
+            let b = document.getElementById('ad-btn'); let t = 5; b.disabled = true;
+            let timer = setInterval(() => {
+                b.innerText = `Sila tunggu ${t}s...`; t--;
+                if(t < 0) { clearInterval(timer); document.getElementById('r-body').classList.remove('blurred'); document.getElementById('paywall').style.display = 'none'; b.disabled = false; b.innerText = "Buka Kandungan (5s)"; }
             }, 1000);
         }
 
-        fetchNovels();
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "naratif_backup.json");
+            dlAnchorElem.click();
+        }
+
+        function importData(event) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                db = JSON.parse(e.target.result);
+                localStorage.setItem('naratif_v3', JSON.stringify(db));
+                alert("Novel berjaya dipulihkan!");
+                showPage('home');
+            };
+            reader.readAsText(event.target.files[0]);
+        }
+
+        function checkAdmin() { if(prompt("Kod:") === "1234") showPage('write'); }
+
+        renderHome(db);
     </script>
 </body>
 </html>
