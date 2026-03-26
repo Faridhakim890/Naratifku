@@ -3,89 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Naratif.ku | Versi Sempurna</title>
+    <title>Naratif.ku | Portal Komik & Novel</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #d35400; --dark: #1a1a1a; --light-bg: #fdfaf6; --white: #ffffff; --text: #2c3e50; }
-        body.dark-mode { --light-bg: #121212; --white: #1e1e1e; --text: #e0e0e0; }
-        body { font-family: 'Poppins', sans-serif; background: var(--light-bg); margin: 0; color: var(--text); transition: 0.3s; }
+        :root { --primary: #e74c3c; --dark: #0f172a; --bg: #0b0f1a; --card: #1e293b; --text: #f8fafc; }
         
-        nav { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.5rem; font-weight: 700; cursor: pointer; color: var(--text); }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; color: var(--text); transition: 0.3s; }
+        
+        /* Navbar ala MGKomik */
+        nav { background: var(--dark); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.6rem; font-weight: 800; color: white; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
         .logo span { color: var(--primary); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        /* Search Bar Moden */
+        .search-bar { width: 100%; padding: 15px 25px; border-radius: 10px; border: none; background: var(--card); color: white; font-family: inherit; margin: 20px 0; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        /* Grid Komik (Portrait) */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         
-        .search-bar { width: 100%; padding: 12px 20px; border-radius: 50px; border: 2px solid var(--primary); background: var(--white); color: var(--text); margin: 20px 0; box-sizing: border-box; }
-        .hero { background: linear-gradient(135deg, #d35400 0%, #a04000 100%); color: white; padding: 40px 5%; text-align: center; border-radius: 0 0 40px 40px; }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid rgba(128,128,128,0.1); }
-        .tag { background: rgba(211, 84, 0, 0.1); color: var(--primary); padding: 4px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; }
-        .reader-box { background: var(--white); padding: 40px; border-radius: 25px; font-family: 'Lora', serif; font-size: 1.2rem; line-height: 1.8; margin-top: 20px; }
-        .blurred { filter: blur(15px); pointer-events: none; height: 200px; overflow: hidden; }
-        .btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px; transition: 0.2s; }
-        .btn:hover { opacity: 0.9; transform: scale(1.02); }
-        .paywall { text-align: center; padding: 40px; background: var(--white); border-radius: 20px; margin-top: -80px; position: relative; z-index: 10; border: 1px solid rgba(128,128,128,0.1); }
+        .card { background: var(--card); border-radius: 8px; overflow: hidden; position: relative; transition: 0.3s; border-bottom: 4px solid transparent; }
+        .card:hover { transform: translateY(-8px); border-bottom: 4px solid var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        /* Gambar Cover */
+        .cover-img { width: 100%; height: 230px; object-fit: cover; background: linear-gradient(45deg, #2c3e50, #000); display: block; }
+        
+        .card-info { padding: 10px; }
+        .card-info h3 { font-size: 0.9rem; margin: 5px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-info p { font-size: 0.75rem; color: #94a3b8; margin: 0; }
+        
+        .tag-genre { position: absolute; top: 8px; left: 8px; background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; }
+
+        /* Skrin Pembaca */
+        .reader-header { text-align: center; padding: 40px 20px; background: linear-gradient(to bottom, var(--dark), var(--bg)); }
+        .reader-box { max-width: 800px; margin: 0 auto; background: #121212; padding: 30px; border-radius: 10px; font-family: 'Lora', serif; font-size: 1.3rem; line-height: 2; color: #e2e8f0; }
+        
+        /* Iklan & Buttons */
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 15px; text-transform: uppercase; }
+        .paywall { text-align: center; padding: 30px; background: var(--card); border-radius: 10px; margin-top: 20px; border: 1px dashed var(--primary); }
+        .blurred { filter: blur(20px); pointer-events: none; height: 300px; overflow: hidden; opacity: 0.3; }
+
         .section { display: none; }
-        .active { display: block; animation: fadeIn 0.5s ease; }
+        .active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc; background: var(--white); color: var(--text); box-sizing: border-box; }
-        footer { text-align: center; padding: 40px; opacity: 0.6; font-size: 0.8rem; }
-        .admin-tools { display: flex; gap: 10px; margin-top: 20px; }
+
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 5px; border: 1px solid #334155; background: #1e293b; color: white; }
+        footer { text-align: center; padding: 50px; opacity: 0.5; font-size: 0.8rem; border-top: 1px solid #1e293b; margin-top: 50px; }
     </style>
 </head>
-<body id="body">
+<body>
 
     <nav>
-        <div class="logo" onclick="showPage('home')">Naratif<span>.ku</span></div>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="document.getElementById('body').classList.toggle('dark-mode')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
-            <button onclick="checkAdmin()" style="background:var(--dark); color:white; border:none; padding:5px 15px; border-radius:50px; cursor:pointer; font-size:0.8rem;">✍️ Penulis</button>
-        </div>
+        <div class="logo" onclick="showPage('home')">MG<span>Naratif</span></div>
+        <button onclick="checkAdmin()" style="background:var(--primary); color:white; border:none; padding:8px 15px; border-radius:5px; font-weight:bold; cursor:pointer;">ADMIN</button>
     </nav>
-
-    <div id="hero" class="hero">
-        <h1 style="margin:0;">Pustaka Digital Anda</h1>
-        <p>Cari, baca, dan simpan karya anda dengan selamat.</p>
-    </div>
 
     <div class="container">
         
         <section id="home" class="section active">
-            <input type="text" id="searchInput" class="search-bar" placeholder="Cari tajuk atau penulis..." onkeyup="filterNovels()">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Cari tajuk cerita atau komik..." onkeyup="filterNovels()">
+            <h2 style="font-size: 1.2rem; border-left: 4px solid var(--primary); padding-left: 10px; margin-bottom: 20px;">UPDATE TERBARU</h2>
             <div id="novel-grid" class="grid"></div>
         </section>
 
         <section id="write" class="section">
-            <div class="card">
-                <h3>Panel Penulis</h3>
-                <input type="text" id="w-author" placeholder="Nama Pena">
-                <input type="text" id="w-title" placeholder="Tajuk Novel">
-                <select id="w-genre">
-                    <option value="Aksi">Aksi</option><option value="Seram">Seram</option>
-                    <option value="Cinta">Cinta</option><option value="Misteri">Misteri</option>
-                </select>
-                <input type="text" id="w-chapter" placeholder="Bab Novel">
-                <textarea id="w-content" rows="10" placeholder="Isi cerita..."></textarea>
-                <button class="btn" onclick="saveNovel()">Terbitkan</button>
+            <div style="background: var(--card); padding: 25px; border-radius: 10px;">
+                <h2 style="margin-top:0;">+ Terbitkan Komik/Novel</h2>
+                <input type="text" id="w-title" placeholder="Tajuk Karya">
+                <input type="text" id="w-author" placeholder="Nama Artist/Penulis">
+                <input type="text" id="w-cover" placeholder="URL Gambar Cover (Contoh: https://link-gambar.jpg)">
+                <div style="display:flex; gap:10px;">
+                    <select id="w-genre" style="flex:1;"><option>Aksi</option><option>Romantik</option><option>Seram</option><option>Misteri</option><option>Isekai</option></select>
+                    <input type="text" id="w-chapter" placeholder="Bab (Contoh: Ch. 01)" style="flex:1;">
+                </div>
+                <textarea id="w-content" rows="12" placeholder="Isi cerita atau deskripsi..."></textarea>
+                <button class="btn" onclick="saveNovel()">SIARKAN SEKARANG</button>
                 
-                <div class="admin-tools">
-                    <button class="btn" style="background:#27ae60; font-size:0.7rem;" onclick="exportData()">📥 Backup Novel</button>
-                    <button class="btn" style="background:#2980b9; font-size:0.7rem;" onclick="document.getElementById('fileInput').click()">📤 Restore Novel</button>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button class="btn" style="background:#475569; font-size:0.7rem;" onclick="exportData()">DOWNLOAD BACKUP</button>
+                    <button class="btn" style="background:#475569; font-size:0.7rem;" onclick="document.getElementById('fileInput').click()">RESTORE DATA</button>
                     <input type="file" id="fileInput" style="display:none" onchange="importData(event)">
                 </div>
-                <center><p onclick="showPage('home')" style="cursor:pointer; opacity:0.5; margin-top:20px;">Batal</p></center>
+                <p onclick="showPage('home')" style="text-align:center; cursor:pointer; margin-top:20px; color:#94a3b8;">Batal</p>
             </div>
         </section>
 
         <section id="reader" class="section">
-            <button onclick="showPage('home')" style="background:none; border:none; color:var(--primary); cursor:pointer; font-weight:bold;">← Kembali</button>
-            <div style="text-align: center; margin: 20px 0;">
-                <span id="r-genre" class="tag"></span>
-                <h1 id="r-title" style="margin:10px 0; font-size: 2rem;"></h1>
-                <p id="r-info" style="opacity:0.7;"></p>
+            <div class="reader-header">
+                <span id="r-genre" style="background:var(--primary); padding:3px 10px; border-radius:4px; font-weight:bold; font-size:0.8rem;"></span>
+                <h1 id="r-title" style="margin: 15px 0 5px 0; font-size: 2.2rem;"></h1>
+                <p id="r-info" style="color: #94a3b8;"></p>
+                <button class="btn" style="width:auto; background:#334155; margin-top:20px;" onclick="showPage('home')">← BALIK KE SENARAI</button>
             </div>
 
-            <div style="text-align:center; margin: 20px 0;">
+            <div style="text-align:center; padding: 20px 0;">
                 <script type="text/javascript">
                     atOptions = {'key' : '77fba6248804533f3fe2e33d020f89d0','format' : 'iframe','height' : 60,'width' : 468,'params' : {}};
                 </script>
@@ -95,22 +107,28 @@
             <div id="r-body" class="reader-box blurred"></div>
 
             <div id="paywall" class="paywall">
-                <h3>Sertai Pengembaraan</h3>
-                <p>Kandungan dikunci seketika. Sila tunggu iklan selesai.</p>
-                <button id="ad-btn" class="btn" style="max-width:250px;" onclick="unlock()">Buka Kandungan (5s)</button>
+                <h3>KANDUNGAN TERKUNCI</h3>
+                <p>Tonton iklan sekejap untuk buka bab ini!</p>
+                <button id="ad-btn" class="btn" style="max-width:300px;" onclick="unlock()">BUKA SEKARANG (5s)</button>
+            </div>
+            
+            <div style="text-align:center; margin-top: 40px;">
+                <script type="text/javascript">
+                    atOptions = {'key' : '77fba6248804533f3fe2e33d020f89d0','format' : 'iframe','height' : 60,'width' : 468,'params' : {}};
+                </script>
+                <script type="text/javascript" src="https://www.highperformanceformat.com/77fba6248804533f3fe2e33d020f89d0/invoke.js"></script>
             </div>
         </section>
     </div>
 
-    <footer>&copy; 2026 Naratif.ku | Ahmad Fauzi</footer>
+    <footer>&copy; 2026 MGNaratif | Gaya Komik Premium</footer>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('naratif_v3')) || [];
+        let db = JSON.parse(localStorage.getItem('mgn_v1')) || [];
 
         function showPage(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.getElementById('hero').style.display = (id === 'home') ? 'block' : 'none';
             if(id === 'home') renderHome(db);
             window.scrollTo(0,0);
         }
@@ -119,31 +137,33 @@
             const grid = document.getElementById('novel-grid');
             grid.innerHTML = data.length ? data.map((n) => `
                 <div class="card" onclick="openNovel('${n.id}')">
-                    <span class="tag">${n.genre}</span>
-                    <h3 style="margin:10px 0 5px 0;">${n.title}</h3>
-                    <p style="font-size:0.8rem; opacity:0.7;">${n.author}</p>
-                    <p style="color:var(--primary); font-weight:600; font-size:0.9rem; margin-top:10px;">${n.chapter}</p>
+                    <span class="tag-genre">${n.genre}</span>
+                    <img src="${n.cover || 'https://via.placeholder.com/200x300/1e293b/white?text=No+Cover'}" class="cover-img" onerror="this.src='https://via.placeholder.com/200x300/1e293b/white?text=${n.title}'">
+                    <div class="card-info">
+                        <h3>${n.title}</h3>
+                        <p>${n.chapter}</p>
+                    </div>
                 </div>
-            `).reverse().join('') : "<p style='grid-column:1/-1; text-align:center;'>Tiada novel.</p>";
+            `).reverse().join('') : "<p style='grid-column:1/-1; text-align:center;'>Belum ada karya baru.</p>";
         }
 
         function filterNovels() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            renderHome(db.filter(n => n.title.toLowerCase().includes(query) || n.author.toLowerCase().includes(query)));
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            renderHome(db.filter(n => n.title.toLowerCase().includes(q) || n.author.toLowerCase().includes(q)));
         }
 
         function saveNovel() {
-            const n = { id: Date.now().toString(), author: document.getElementById('w-author').value, title: document.getElementById('w-title').value, genre: document.getElementById('w-genre').value, chapter: document.getElementById('w-chapter').value, content: document.getElementById('w-content').value };
-            if(!n.title || !n.content) return alert("Sila lengkapkan!");
-            db.push(n); localStorage.setItem('naratif_v3', JSON.stringify(db));
-            alert("Berjaya disiarkan!"); showPage('home');
+            const n = { id: Date.now().toString(), author: document.getElementById('w-author').value, title: document.getElementById('w-title').value, cover: document.getElementById('w-cover').value, genre: document.getElementById('w-genre').value, chapter: document.getElementById('w-chapter').value, content: document.getElementById('w-content').value };
+            if(!n.title || !n.content) return alert("Tajuk & Isi wajib ada!");
+            db.push(n); localStorage.setItem('mgn_v1', JSON.stringify(db));
+            alert("Berjaya Disiarkan!"); showPage('home');
         }
 
         function openNovel(id) {
             const n = db.find(item => item.id === id);
             document.getElementById('r-title').innerText = n.title;
             document.getElementById('r-genre').innerText = n.genre;
-            document.getElementById('r-info').innerText = `Oleh ${n.author} | ${n.chapter}`;
+            document.getElementById('r-info').innerText = `Artist: ${n.author} | ${n.chapter}`;
             document.getElementById('r-body').innerText = n.content;
             document.getElementById('r-body').classList.add('blurred');
             document.getElementById('paywall').style.display = 'block';
@@ -153,31 +173,22 @@
         function unlock() {
             let b = document.getElementById('ad-btn'); let t = 5; b.disabled = true;
             let timer = setInterval(() => {
-                b.innerText = `Sila tunggu ${t}s...`; t--;
-                if(t < 0) { clearInterval(timer); document.getElementById('r-body').classList.remove('blurred'); document.getElementById('paywall').style.display = 'none'; b.disabled = false; b.innerText = "Buka Kandungan (5s)"; }
+                b.innerText = `LOADING ${t}s...`; t--;
+                if(t < 0) { clearInterval(timer); document.getElementById('r-body').classList.remove('blurred'); document.getElementById('paywall').style.display = 'none'; b.disabled = false; b.innerText = "BUKA SEKARANG (5s)"; }
             }, 1000);
         }
 
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "naratif_backup.json");
-            dlAnchorElem.click();
+            const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "mgnaratif_backup.json"); dl.click();
         }
 
-        function importData(event) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                db = JSON.parse(e.target.result);
-                localStorage.setItem('naratif_v3', JSON.stringify(db));
-                alert("Novel berjaya dipulihkan!");
-                showPage('home');
-            };
-            reader.readAsText(event.target.files[0]);
+        function importData(e) {
+            const r = new FileReader(); r.onload = (ev) => { db = JSON.parse(ev.target.result); localStorage.setItem('mgn_v1', JSON.stringify(db)); showPage('home'); };
+            r.readAsText(e.target.files[0]);
         }
 
-        function checkAdmin() { if(prompt("Kod:") === "1234") showPage('write'); }
+        function checkAdmin() { if(prompt("KOD:") === "1234") showPage('write'); }
 
         renderHome(db);
     </script>
