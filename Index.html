@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naratif.ku | Portal Novel Fiksi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Lora&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #1a1a1a; --a: #d35400; --bg: #fdfaf6; }
+        body { font-family: 'Lora', serif; background: var(--bg); margin: 0; padding: 0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        nav { background: white; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
+        .logo { font-family: 'Poppins'; font-weight: 700; font-size: 1.5rem; color: var(--p); }
+        .logo span { color: var(--a); }
+        .hero { background: #eee; padding: 50px 20px; text-align: center; border-radius: 10px; margin: 20px 0; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; border-left: 5px solid var(--a); }
+        .blurred { filter: blur(5px); user-select: none; pointer-events: none; }
+        .paywall { background: rgba(255,255,255,0.9); padding: 30px; text-align: center; border: 2px solid #ddd; margin-top: 20px; }
+        .btn { background: var(--a); color: white; padding: 12px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <nav><div class="logo">Naratif<span>.ku</span></div></nav>
+
+    <div class="container" id="main-content">
+        <div class="hero">
+            <h1>Selamat Datang ke Naratif.ku</h1>
+            <p>Portal novel fiksi pilihan ramai.</p>
+        </div>
+
+        <h3>Koleksi Terkini:</h3>
+        <div class="card" onclick="openNovel()">
+            <h4>Rahsia Kota Hilang (Bab 50)</h4>
+            <p>Oleh: Ahmad Fauzi</p>
+            <small>Klik untuk mula membaca...</small>
+        </div>
+    </div>
+
+    <div class="container" id="reader-content" style="display:none;">
+        <button onclick="goBack()" style="margin-bottom:20px;">← Kembali</button>
+        <h2>Rahsia Kota Hilang: Bab 50</h2>
+        <div id="story" class="blurred">
+            <p>Malam itu sangat sunyi. Adam berdiri di depan pintu gua yang misteri itu. Dia tahu rahsia besar bakal terbongkar...</p>
+            <p>Teks ini hanya boleh dibaca selepas iklan selesai ditonton sepenuhnya oleh pembaca setia kami.</p>
+        </div>
+
+        <div id="paywall" class="paywall">
+            <h3>🔒 Kandungan Dikunci</h3>
+            <p>Sila tonton iklan ringkas (5 saat) untuk menyokong penulis kami.</p>
+            <div style="background:#f9f9f9; padding:20px; border:1px dashed #ccc; margin:15px 0;">
+                [ IKLAN ADSTERRA DI SINI ]
+            </div>
+            <button id="ad-btn" class="btn" onclick="startAd()">Tonton Iklan & Buka</button>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Naratif.ku | <a href="#" onclick="alert('Dasar Privasi: Kami menggunakan kuki iklan Adsterra.')">Dasar Privasi</a></footer>
+
+    <script>
+        function openNovel() {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('reader-content').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function goBack() {
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('reader-content').style.display = 'none';
+        }
+
+        function startAd() {
+            let btn = document.getElementById('ad-btn');
+            let count = 5;
+            btn.disabled = true;
+            let timer = setInterval(() => {
+                btn.innerText = `Sila Tunggu (${count}s)...`;
+                count--;
+                if(count < 0) {
+                    clearInterval(timer);
+                    document.getElementById('paywall').style.display = 'none';
+                    document.getElementById('story').classList.remove('blurred');
+                    alert("Kandungan berjaya dibuka!");
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
