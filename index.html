@@ -3,106 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MG-Naratif Mobile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>RedNaratif | Official App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=Lora:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #ff4655; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
-        
-        /* Layout Dasar Phone */
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; color: var(--text); -webkit-tap-highlight-color: transparent; }
-        
-        nav { background: #020617; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.4rem; font-weight: 900; color: white; letter-spacing: -1px; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; color: var(--text); overflow-x: hidden; }
+
+        /* SPLASH SCREEN */
+        #splash { position: fixed; inset: 0; background: #020617; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.8s; }
+        .splash-logo { font-size: 2.5rem; font-weight: 900; color: white; animation: pulse 1.5s infinite; }
+        .splash-logo span { color: var(--primary); }
+        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0.5; transform: scale(0.9); } }
+
+        /* NAVIGATION */
+        nav { background: #020617; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.4rem; font-weight: 900; cursor: pointer; }
         .logo span { color: var(--primary); }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
 
-        /* Grid Komik Ala App */
+        /* GENRE BAR */
+        .genre-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
+        .genre-bar::-webkit-scrollbar { display: none; }
+        .genre-btn { background: var(--card); border: 1px solid #334155; color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; cursor: pointer; }
+        .genre-btn.active { background: var(--primary); border-color: var(--primary); }
+
+        /* GRID NOVEL */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .card { background: var(--card); border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #334155; }
-        
-        .cover-img { width: 100%; height: 200px; object-fit: cover; background: #334155; display: block; }
-        .card-info { padding: 8px; }
-        .card-info h3 { font-size: 0.85rem; margin: 3px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
-        /* Butang Hapus (Hanya untuk Admin) */
-        .btn-delete { background: rgba(255,0,0,0.7); color: white; border: none; padding: 5px; font-size: 10px; width: 100%; cursor: pointer; }
+        .card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #334155; position: relative; }
+        .cover-img { width: 100%; height: 220px; object-fit: cover; background: #334155; }
+        .card-info { padding: 10px; }
+        .card-info h3 { font-size: 0.85rem; margin: 0; color: var(--primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .card-info p { font-size: 0.7rem; color: #94a3b8; line-height: 1.4; height: 35px; overflow: hidden; margin: 5px 0; }
 
-        /* Slot Iklan */
-        .ad-container { margin: 15px 0; text-align: center; min-height: 50px; background: rgba(255,255,255,0.03); border-radius: 5px; overflow: hidden; }
+        /* READER SETTINGS */
+        .font-tools { display: flex; justify-content: center; gap: 20px; margin-top: 10px; background: #020617; padding: 10px; border-radius: 10px; }
+        .tool-btn { background: none; border: 1px solid #334155; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
 
-        /* Reader View */
-        .reader-header { padding: 20px 10px; text-align: center; border-bottom: 1px solid #334155; }
-        .reader-content { padding: 20px; font-size: 1.1rem; line-height: 1.8; color: #cbd5e1; }
-        .blurred { filter: blur(20px); opacity: 0.2; pointer-events: none; }
+        /* READER CONTENT */
+        .reader-header { text-align: center; padding: 30px 10px; }
+        .sinopsis-box { background: rgba(255, 70, 85, 0.05); border: 1px dashed var(--primary); padding: 15px; border-radius: 10px; font-size: 0.85rem; margin: 15px 0; }
+        .reader-content { font-family: 'Lora', serif; font-size: 1.2rem; line-height: 2; padding: 10px; color: #e2e8f0; text-align: justify; }
+        .blurred { filter: blur(20px); opacity: 0.1; height: 300px; overflow: hidden; }
 
-        /* Global Buttons */
-        .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        /* ADMIN & BUTTONS */
+        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .section { display: none; }
-        .active { display: block; }
+        .active { display: block; animation: fadeInUp 0.4s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #020617; color: white; font-family: inherit; box-sizing: border-box; }
+        footer { text-align: center; padding: 40px; opacity: 0.3; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
+    <div id="splash">
+        <div class="splash-logo">RED<span>NARATIF</span></div>
+        <p style="font-size: 0.7rem; color: #94a3b8; margin-top: 10px;">Memuatkan Cerita...</p>
+    </div>
+
     <nav>
-        <div class="logo" onclick="location.reload()">MG<span>NARATIF</span></div>
-        <button onclick="checkAdmin()" style="background:var(--card); color:white; border:1px solid var(--primary); padding:5px 12px; border-radius:5px; font-size:0.7rem;">ADMIN</button>
+        <div class="logo" onclick="location.reload()">RED<span>NARATIF</span></div>
+        <button onclick="checkAdmin()" style="background:var(--primary); color:white; border:none; padding:6px 15px; border-radius:8px; font-size:0.7rem; font-weight:bold;">PANEL</button>
     </nav>
 
     <div class="container">
         <section id="home" class="section active">
-            <div class="ad-container">
-                <script type="text/javascript">
-                    atOptions = { 'key' : '77fba6248804533f3fe2e33d020f89d0', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-                </script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/77fba6248804533f3fe2e33d020f89d0/invoke.js"></script>
+            <div class="genre-bar">
+                <button class="genre-btn active" onclick="filterGenre('Semua', this)">Semua</button>
+                <button class="genre-btn" onclick="filterGenre('Aksi', this)">Aksi</button>
+                <button class="genre-btn" onclick="filterGenre('Seram', this)">Seram</button>
+                <button class="genre-btn" onclick="filterGenre('Romantik', this)">Romantik</button>
+                <button class="genre-btn" onclick="filterGenre('Isekai', this)">Isekai</button>
             </div>
-
-            <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 15px;">🔥 UPDATE TERKINI</h3>
+            
             <div id="novel-grid" class="grid"></div>
         </section>
 
         <section id="admin" class="section">
-            <div style="background: var(--card); padding: 20px; border-radius: 12px;">
-                <h3 style="margin-top:0;">Urus Karya</h3>
-                <input type="text" id="w-title" placeholder="Tajuk">
-                <input type="text" id="w-author" placeholder="Penulis">
+            <div style="background: var(--card); padding: 20px; border-radius: 15px;">
+                <h3 style="margin:0 0 15px 0;">Terbit Karya Baru</h3>
+                <input type="text" id="w-title" placeholder="Tajuk Novel">
+                <select id="w-genre">
+                    <option value="Aksi">Aksi</option><option value="Seram">Seram</option>
+                    <option value="Romantik">Romantik</option><option value="Isekai">Isekai</option>
+                </select>
+                <input type="text" id="w-author" placeholder="Nama Penulis">
                 <input type="text" id="w-cover" placeholder="Link Gambar Cover">
-                <input type="text" id="w-chapter" placeholder="Bab (Contoh: Ch.1)">
-                <textarea id="w-content" rows="8" placeholder="Isi cerita..."></textarea>
-                <button class="btn" onclick="saveNovel()">SIARKAN SEKARANG</button>
-                <button class="btn" style="background:#475569;" onclick="showPage('home')">KEMBALI</button>
+                <input type="text" id="w-chapter" placeholder="Bab (Contoh: Bab 01)">
+                <textarea id="w-sinopsis" rows="3" placeholder="Sinopsis ringkas..."></textarea>
+                <textarea id="w-content" rows="10" placeholder="Isi cerita bab ini..."></textarea>
+                <button class="btn" onclick="saveNovel()">TERBITKAN SEKARANG</button>
+                
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="tool-btn" style="flex:1;" onclick="downloadData()">BACKUP</button>
+                    <button class="tool-btn" style="flex:1;" onclick="document.getElementById('fIn').click()">RESTORE</button>
+                    <input type="file" id="fIn" style="display:none" onchange="restoreData(event)">
+                </div>
+                <p onclick="showPage('home')" style="text-align:center; margin-top:20px; cursor:pointer; color: #94a3b8;">Batal</p>
             </div>
         </section>
 
         <section id="reader" class="section">
             <button onclick="showPage('home')" style="background:none; border:none; color:var(--primary); font-weight:bold; padding:10px 0;">← KEMBALI</button>
+            
             <div class="reader-header">
-                <h2 id="r-title" style="margin:0;"></h2>
-                <p id="r-info" style="font-size:0.8rem; opacity:0.6;"></p>
+                <h2 id="r-title" style="margin:0; font-size: 2rem;"></h2>
+                <p id="r-info" style="font-size: 0.8rem; color: #94a3b8;"></p>
+                
+                <div class="font-tools">
+                    <button class="tool-btn" onclick="changeFont(-2)">A-</button>
+                    <button class="tool-btn" onclick="changeFont(2)">A+</button>
+                </div>
             </div>
 
-            <div class="ad-container">
-                <script type="text/javascript">
-                    atOptions = { 'key' : '77fba6248804533f3fe2e33d020f89d0', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-                </script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/77fba6248804533f3fe2e33d020f89d0/invoke.js"></script>
-            </div>
+            <div id="r-sinopsis" class="sinopsis-box"></div>
 
             <div id="r-body" class="reader-content blurred"></div>
 
-            <div id="paywall" style="text-align:center; padding:30px; background:#020617; border-radius:15px; margin-top:20px;">
-                <p style="font-size:0.9rem;">Tonton iklan untuk buka bab penuh.</p>
-                <button id="ad-btn" class="btn" onclick="unlock()">BUKA BAB (5s)</button>
+            <div id="paywall" style="text-align:center; padding:30px; background:#020617; border-radius:15px; margin-top:20px; border: 1px solid var(--primary);">
+                <p style="font-size:0.8rem;">Iklan sedang dimuatkan untuk membuka bab.</p>
+                <button id="ad-btn" class="btn" onclick="unlock()">BUKA SEKARANG (5s)</button>
             </div>
         </section>
     </div>
 
+    <footer>&copy; 2026 RedNaratif v6.0 | Ahmad Fauzi</footer>
+
     <script>
-        let db = JSON.parse(localStorage.getItem('mgn_final_v4')) || [];
-        let isAdminView = false;
+        let db = JSON.parse(localStorage.getItem('rn_v6')) || [];
+        let isAdmin = false;
+        let fontSize = 1.2;
+
+        // Tutup Splash Screen selepas 2 saat
+        setTimeout(() => { document.getElementById('splash').style.opacity = '0'; 
+        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 800); }, 2000);
 
         function showPage(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -119,33 +155,33 @@
                         <img src="${n.cover || 'https://via.placeholder.com/200x300'}" class="cover-img">
                         <div class="card-info">
                             <h3>${n.title}</h3>
-                            <p style="font-size:0.7rem; color:var(--primary)">${n.chapter}</p>
+                            <p>${n.sinopsis || 'Tiada sinopsis.'}</p>
+                            <span style="font-size:0.6rem; background:rgba(255,70,85,0.2); padding:2px 6px; border-radius:4px; color:var(--primary); font-weight:bold;">${n.genre}</span>
                         </div>
                     </div>
-                    ${isAdminView ? `<button class="btn-delete" onclick="deleteNovel('${n.id}')">HAPUS</button>` : ''}
+                    ${isAdmin ? `<button onclick="deleteNovel('${n.id}')" style="width:100%; background:red; border:none; color:white; font-size:10px; padding:5px; cursor:pointer;">HAPUS</button>` : ''}
                 </div>
-            `).reverse().join('') || "<p style='grid-column:1/-1; text-align:center; opacity:0.5;'>Tiada karya lagi.</p>";
+            `).reverse().join('') || "<p style='grid-column:1/-1; text-align:center; padding:50px; opacity:0.3;'>Kosong.</p>";
+        }
+
+        function filterGenre(genre, btn) {
+            document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if(genre === 'Semua') renderHome(db);
+            else renderHome(db.filter(n => n.genre === genre));
         }
 
         function saveNovel() {
-            const n = { id: Date.now().toString(), author: document.getElementById('w-author').value, title: document.getElementById('w-title').value, cover: document.getElementById('w-cover').value, chapter: document.getElementById('w-chapter').value, content: document.getElementById('w-content').value };
-            if(!n.title || !n.content) return alert("Sila isi tajuk dan cerita!");
-            db.push(n); localStorage.setItem('mgn_final_v4', JSON.stringify(db));
-            alert("Berjaya Disiarkan!"); showPage('home');
-        }
-
-        function deleteNovel(id) {
-            if(confirm("Padam karya ini?")) {
-                db = db.filter(item => item.id !== id);
-                localStorage.setItem('mgn_final_v4', JSON.stringify(db));
-                renderHome(db);
-            }
+            const n = { id: Date.now().toString(), genre: document.getElementById('w-genre').value, author: document.getElementById('w-author').value, title: document.getElementById('w-title').value, cover: document.getElementById('w-cover').value, chapter: document.getElementById('w-chapter').value, sinopsis: document.getElementById('w-sinopsis').value, content: document.getElementById('w-content').value };
+            db.push(n); localStorage.setItem('rn_v6', JSON.stringify(db));
+            alert("Berjaya!"); showPage('home');
         }
 
         function openNovel(id) {
             const n = db.find(item => item.id === id);
             document.getElementById('r-title').innerText = n.title;
-            document.getElementById('r-info').innerText = `Artis: ${n.author} | ${n.chapter}`;
+            document.getElementById('r-info').innerText = `${n.author} | ${n.chapter}`;
+            document.getElementById('r-sinopsis').innerText = n.sinopsis || "Tiada sinopsis.";
             document.getElementById('r-body').innerText = n.content;
             document.getElementById('r-body').classList.add('blurred');
             document.getElementById('paywall').style.display = 'block';
@@ -155,16 +191,25 @@
         function unlock() {
             let b = document.getElementById('ad-btn'); let t = 5; b.disabled = true;
             let timer = setInterval(() => {
-                b.innerText = `Sila tunggu ${t}s...`; t--;
-                if(t < 0) { clearInterval(timer); document.getElementById('r-body').classList.remove('blurred'); document.getElementById('paywall').style.display = 'none'; b.disabled = false; b.innerText = "BUKA BAB"; }
+                b.innerText = `LOADING iklan... ${t}s`; t--;
+                if(t < 0) { clearInterval(timer); document.getElementById('r-body').classList.remove('blurred'); document.getElementById('paywall').style.display = 'none'; b.disabled = false; b.innerText = "BUKA SEKARANG (5s)"; }
             }, 1000);
         }
 
-        function checkAdmin() {
-            let p = prompt("KOD ADMIN:");
-            if(p === "1234") { isAdminView = true; showPage('admin'); }
-            else if(p === "tutup") { isAdminView = false; renderHome(db); }
+        function changeFont(v) { fontSize += v * 0.1; document.getElementById('r-body').style.fontSize = fontSize + "rem"; }
+
+        function downloadData() {
+            const blob = new Blob([JSON.stringify(db)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = "rednaratif_backup.json"; a.click();
         }
+
+        function restoreData(e) {
+            const r = new FileReader(); r.onload = (ev) => { db = JSON.parse(ev.target.result); localStorage.setItem('rn_v6', JSON.stringify(db)); renderHome(db); };
+            r.readAsText(e.target.files[0]);
+        }
+
+        function checkAdmin() { let p = prompt("KOD:"); if(p === "1234") { isAdmin = true; showPage('admin'); } else if(p === "tutup") { isAdmin = false; renderHome(db); } }
 
         renderHome(db);
     </script>
